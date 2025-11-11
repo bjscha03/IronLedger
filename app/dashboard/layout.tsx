@@ -1,6 +1,5 @@
 "use client"
 
-import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -19,7 +18,6 @@ const navigation = [
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -70,13 +68,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="p-4 border-t">
             <div className="flex items-center justify-between mb-2">
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{session?.user?.name || "User"}</p>
-                <p className="text-xs text-muted-foreground truncate">{session?.user?.email}</p>
+                <p className="text-sm font-medium truncate">Demo User</p>
+                <p className="text-xs text-muted-foreground truncate">demo@ironledger.app</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="w-full" onClick={() => signOut({ callbackUrl: "/auth/signin" })}>
+            <Button variant="outline" size="sm" className="w-full" disabled>
               <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
+              Sign Out (Disabled)
             </Button>
           </div>
         </div>

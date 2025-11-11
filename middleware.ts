@@ -1,30 +1,13 @@
-import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
-export default withAuth(
-  function middleware(req) {
-    return NextResponse.next()
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        // Allow access to auth pages without token
-        if (req.nextUrl.pathname.startsWith("/auth")) {
-          return true
-        }
-        // Require token for dashboard and other protected routes
-        return !!token
-      },
-    },
-    pages: {
-      signIn: "/auth/signin",
-    },
-  }
-)
+// Temporarily disabled for UI preview
+// Will re-enable when database is set up
+
+export function middleware(request: NextRequest) {
+  return NextResponse.next()
+}
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/",
-  ],
+  matcher: [],
 }

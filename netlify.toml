@@ -1,5 +1,5 @@
 [build]
-  command = "npx prisma generate && npm run build"
+  command = "rm -rf .next && npx prisma generate && npm run build"
   publish = ".next"
 
 [[plugins]]
@@ -8,4 +8,3 @@
 [build.environment]
   NODE_VERSION = "22"
   NPM_FLAGS = "--legacy-peer-deps"
-  # Force fresh CSS build - 2025-11-11

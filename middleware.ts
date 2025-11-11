@@ -8,15 +8,23 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token, req }) => {
+        // Allow access to auth pages without token
         if (req.nextUrl.pathname.startsWith("/auth")) {
           return true
         }
+        // Require token for dashboard and other protected routes
         return !!token
       },
+    },
+    pages: {
+      signIn: "/auth/signin",
     },
   }
 )
 
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\..*|public).*)"],
+  matcher: [
+    "/dashboard/:path*",
+    "/",
+  ],
 }

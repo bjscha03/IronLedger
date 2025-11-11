@@ -1,6 +1,13 @@
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-export default function Home() {
-  // Redirect to dashboard - middleware will handle auth
-  redirect("/dashboard");
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  
+  if (session) {
+    redirect("/dashboard");
+  } else {
+    redirect("/auth/signin");
+  }
 }

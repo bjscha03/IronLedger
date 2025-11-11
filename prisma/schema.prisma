@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  COACH
+  ATHLETE
+}
+
+enum CompoundCategory {
+  TRT
+  ANABOLIC
+  ANCILLARY
+  OTHER
+}
+
+enum InjectionRoute {
+  IM
+  SUBQ
+  ORAL
+  TRANSDERMAL
+  OTHER
+}
+
+enum InjectionSite {
+  GLUTE
+  QUAD
+  DELT
+  VG
+  LAT
+  PECT
+  AB
+  OTHER
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+  PRE_WORKOUT
+  POST_WORKOUT
+}
+
+enum BodyPart {
+  CHEST
+  BACK
+  SHOULDERS
+  ARMS
+  LEGS
+  CORE
+  CARDIO
+  FULL_BODY
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          Role      @default(ATHLETE)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile      Profile?
+  compounds    Compound[]
+  doseLogs     DoseLog[]
+  labPanels    LabPanel[]
+  workouts     Workout[]
+  foodLogs     FoodLog[]
+
+  @@index([email])
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  birthDate DateTime?
+  gender    String?
+  height    Float?
+  weight    Float?
+  unitSystem String @default("US")
+  timezone   String @default("America/New_York")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Compound {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name        String
+  category    CompoundCategory
+  notes       String?
+  isArchived  Boolean          @default(false)
+  
+  doseLogs    DoseLog[]
+  
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId])
+}
+
+model DoseLog {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  compoundId  String
+  compound    Compound       @relation(fields: [compoundId], references: [id], onDelete: Cascade)
+  
+  dateTime    DateTime
+  doseMg      Float
+  route       InjectionRoute
+  site        InjectionSite?
+  
+  mood        Int?
+  energy      Int?
+  libido      Int?
+  notes       String?
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([userId, dateTime])
+  @@index([compoundId])
+}
+
+model LabPanel {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date      DateTime
+  notes     String?
+  
+  totalT    Float?
+  freeT     Float?
+  estradiol Float?
+  shbg      Float?
+  hdl       Float?
+  ldl       Float?
+  ast       Float?
+  alt       Float?
+  hematocrit Float?
+  hemoglobin Float?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+}
+
+model Workout {
+  id                  String     @id @default(cuid())
+  userId              String
+  user                User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date                DateTime
+  splitName           String?
+  perceivedIntensity  Int?
+  notes               String?
+  
+  exercises           Exercise[]
+  
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  @@index([userId, date])
+}
+
+model Exercise {
+  id          String   @id @default(cuid())
+  workoutId   String
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  
+  name        String
+  bodyPart    BodyPart
+  order       Int      @default(0)
+  notes       String?
+  
+  sets        Set[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([workoutId])
+}
+
+model Set {
+  id          String   @id @default(cuid())
+  exerciseId  String
+  exercise    Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  
+  setNumber   Int
+  reps        Int?
+  weight      Float?
+  rpe         Float?
+  notes       String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([exerciseId])
+}
+
+model FoodLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  dateTime    DateTime
+  mealType    MealType
+  foodName    String
+  quantity    Float
+  unit        String
+  
+  calories    Float?
+  protein     Float?
+  carbs       Float?
+  fat         Float?
+  fiber       Float?
+  
+  notes       String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, dateTime])
+}

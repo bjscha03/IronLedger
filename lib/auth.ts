@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs'
 import { Role } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
-  // Removed PrismaAdapter - not compatible with JWT strategy
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -47,15 +46,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = user.role
+        token.id = user.id as string
+        token.role = user.role as Role
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id
-        session.user.role = token.role
+        session.user.id = token.id as string
+        session.user.role = token.role as Role
       }
       return session
     },
@@ -65,6 +64,7 @@ export const authOptions: NextAuthOptions = {
     signOut: '/auth/signin',
     error: '/auth/signin',
   },
+  secret: process.env.NEXTAUTH_SECRET,
 }
 
 export async function getCurrentUser() {

@@ -143,7 +143,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
           <div className="grid gap-4 py-4">
             {/* Compound Selection */}
             <div className="grid gap-2">
-              <Label htmlFor="compound">Compound *</Label>
+              <Label htmlFor="compound" className="text-foreground">Compound *</Label>
               <Select
                 value={selectedCompound}
                 onValueChange={(value) => setValue("compoundId", value)}
@@ -172,7 +172,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
 
             {/* Date/Time */}
             <div className="grid gap-2">
-              <Label htmlFor="datetime">Date & Time *</Label>
+              <Label htmlFor="datetime" className="text-foreground">Date & Time *</Label>
               <Input
                 id="datetime"
                 type="datetime-local"
@@ -185,7 +185,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
 
             {/* Dose Amount */}
             <div className="grid gap-2">
-              <Label htmlFor="amount">Dose (mg) *</Label>
+              <Label htmlFor="amount" className="text-foreground">Dose (mg) *</Label>
               <Input
                 id="amount"
                 type="number"
@@ -200,7 +200,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
 
             {/* Route */}
             <div className="grid gap-2">
-              <Label htmlFor="route">Route *</Label>
+              <Label htmlFor="route" className="text-foreground">Route *</Label>
               <Select
                 value={selectedRoute}
                 onValueChange={(value) => setValue("route", value as any)}
@@ -224,7 +224,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
             {/* Injection Site - only show for IM/SUBQ */}
             {(selectedRoute === "IM" || selectedRoute === "SUBQ") && (
               <div className="grid gap-2">
-                <Label htmlFor="site">Injection Site</Label>
+                <Label htmlFor="site" className="text-foreground">Injection Site</Label>
                 <Select
                   value={selectedSite}
                   onValueChange={(value) => setValue("site", value as any)}
@@ -249,7 +249,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
             {/* Mood, Energy, Libido */}
             <div className="grid grid-cols-3 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="mood">Mood (1-10)</Label>
+                <Label htmlFor="mood" className="text-foreground">Mood (1-10)</Label>
                 <Input
                   id="mood"
                   type="number"
@@ -260,7 +260,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="energy">Energy (1-10)</Label>
+                <Label htmlFor="energy" className="text-foreground">Energy (1-10)</Label>
                 <Input
                   id="energy"
                   type="number"
@@ -271,7 +271,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="libido">Libido (1-10)</Label>
+                <Label htmlFor="libido" className="text-foreground">Libido (1-10)</Label>
                 <Input
                   id="libido"
                   type="number"
@@ -285,7 +285,7 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
 
             {/* Notes */}
             <div className="grid gap-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes" className="text-foreground">Notes</Label>
               <Textarea
                 id="notes"
                 placeholder="Any additional notes about this dose..."

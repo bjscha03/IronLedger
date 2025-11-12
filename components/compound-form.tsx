@@ -108,8 +108,10 @@ export function CompoundForm({ open, onOpenChange, compound, onSuccess }: Compou
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Compound" : "Add Compound"}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground text-xl font-semibold">
+            {isEditing ? "Edit Compound" : "Add Compound"}
+          </DialogTitle>
+          <DialogDescription className="text-foreground/70">
             {isEditing ? "Update compound details." : "Add a new compound to your library."}
           </DialogDescription>
         </DialogHeader>
@@ -118,25 +120,26 @@ export function CompoundForm({ open, onOpenChange, compound, onSuccess }: Compou
           <div className="grid gap-4 py-4">
             {/* Name */}
             <div className="grid gap-2">
-              <Label htmlFor="name" className="text-foreground">Name *</Label>
+              <Label htmlFor="name" className="text-foreground font-medium">Name *</Label>
               <Input
                 id="name"
                 placeholder="e.g., Testosterone Cypionate"
+                className="bg-background text-foreground"
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-xs text-destructive">{errors.name.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.name.message}</p>
               )}
             </div>
 
             {/* Category */}
             <div className="grid gap-2">
-              <Label htmlFor="category" className="text-foreground">Category *</Label>
+              <Label htmlFor="category" className="text-foreground font-medium">Category *</Label>
               <Select
                 value={selectedCategory}
                 onValueChange={(value) => setValue("category", value as any)}
               >
-                <SelectTrigger id="category">
+                <SelectTrigger id="category" className="bg-background text-foreground">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -147,17 +150,18 @@ export function CompoundForm({ open, onOpenChange, compound, onSuccess }: Compou
                 </SelectContent>
               </Select>
               {errors.category && (
-                <p className="text-xs text-destructive">{errors.category.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.category.message}</p>
               )}
             </div>
 
             {/* Notes */}
             <div className="grid gap-2">
-              <Label htmlFor="notes" className="text-foreground">Notes</Label>
+              <Label htmlFor="notes" className="text-foreground font-medium">Notes</Label>
               <Textarea
                 id="notes"
                 placeholder="Additional information about this compound..."
                 rows={3}
+                className="bg-background text-foreground"
                 {...register("notes")}
               />
             </div>
@@ -173,7 +177,7 @@ export function CompoundForm({ open, onOpenChange, compound, onSuccess }: Compou
               Cancel
             </Button>
             <Button type="submit" disabled={saveMutation.isPending}>
-              {saveMutation.isPending ? "Saving..." : isEditing ? "Update" : "Add Compound"}
+              {saveMutation.isPending ? "Saving..." : isEditing ? "Update Compound" : "Add Compound"}
             </Button>
           </DialogFooter>
         </form>

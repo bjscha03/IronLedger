@@ -133,8 +133,8 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Log Dose</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground text-xl font-semibold">Log Dose</DialogTitle>
+          <DialogDescription className="text-foreground/70">
             Record your injection details. All fields marked with * are required.
           </DialogDescription>
         </DialogHeader>
@@ -143,12 +143,12 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
           <div className="grid gap-4 py-4">
             {/* Compound Selection */}
             <div className="grid gap-2">
-              <Label htmlFor="compound" className="text-foreground">Compound *</Label>
+              <Label htmlFor="compound" className="text-foreground font-medium">Compound *</Label>
               <Select
                 value={selectedCompound}
                 onValueChange={(value) => setValue("compoundId", value)}
               >
-                <SelectTrigger id="compound">
+                <SelectTrigger id="compound" className="bg-background text-foreground">
                   <SelectValue placeholder={isLoadingCompounds ? "Loading..." : "Select compound"} />
                 </SelectTrigger>
                 <SelectContent>
@@ -166,46 +166,48 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
                 </SelectContent>
               </Select>
               {errors.compoundId && (
-                <p className="text-xs text-destructive">{errors.compoundId.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.compoundId.message}</p>
               )}
             </div>
 
             {/* Date/Time */}
             <div className="grid gap-2">
-              <Label htmlFor="datetime" className="text-foreground">Date & Time *</Label>
+              <Label htmlFor="datetime" className="text-foreground font-medium">Date & Time *</Label>
               <Input
                 id="datetime"
                 type="datetime-local"
+                className="bg-background text-foreground"
                 {...register("dateTime")}
               />
               {errors.dateTime && (
-                <p className="text-xs text-destructive">{errors.dateTime.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.dateTime.message}</p>
               )}
             </div>
 
             {/* Dose Amount */}
             <div className="grid gap-2">
-              <Label htmlFor="amount" className="text-foreground">Dose (mg) *</Label>
+              <Label htmlFor="amount" className="text-foreground font-medium">Dose (mg) *</Label>
               <Input
                 id="amount"
                 type="number"
                 step="0.1"
                 placeholder="100"
+                className="bg-background text-foreground"
                 {...register("doseMg")}
               />
               {errors.doseMg && (
-                <p className="text-xs text-destructive">{errors.doseMg.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.doseMg.message}</p>
               )}
             </div>
 
             {/* Route */}
             <div className="grid gap-2">
-              <Label htmlFor="route" className="text-foreground">Route *</Label>
+              <Label htmlFor="route" className="text-foreground font-medium">Route *</Label>
               <Select
                 value={selectedRoute}
                 onValueChange={(value) => setValue("route", value as any)}
               >
-                <SelectTrigger id="route">
+                <SelectTrigger id="route" className="bg-background text-foreground">
                   <SelectValue placeholder="Select route" />
                 </SelectTrigger>
                 <SelectContent>
@@ -217,19 +219,19 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
                 </SelectContent>
               </Select>
               {errors.route && (
-                <p className="text-xs text-destructive">{errors.route.message}</p>
+                <p className="text-xs text-destructive font-medium">{errors.route.message}</p>
               )}
             </div>
 
             {/* Injection Site - only show for IM/SUBQ */}
             {(selectedRoute === "IM" || selectedRoute === "SUBQ") && (
               <div className="grid gap-2">
-                <Label htmlFor="site" className="text-foreground">Injection Site</Label>
+                <Label htmlFor="site" className="text-foreground font-medium">Injection Site</Label>
                 <Select
                   value={selectedSite}
                   onValueChange={(value) => setValue("site", value as any)}
                 >
-                  <SelectTrigger id="site">
+                  <SelectTrigger id="site" className="bg-background text-foreground">
                     <SelectValue placeholder="Select site (optional)" />
                   </SelectTrigger>
                   <SelectContent>
@@ -249,35 +251,38 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
             {/* Mood, Energy, Libido */}
             <div className="grid grid-cols-3 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="mood" className="text-foreground">Mood (1-10)</Label>
+                <Label htmlFor="mood" className="text-foreground font-medium">Mood (1-10)</Label>
                 <Input
                   id="mood"
                   type="number"
                   min="1"
                   max="10"
                   placeholder="5"
+                  className="bg-background text-foreground"
                   {...register("mood")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="energy" className="text-foreground">Energy (1-10)</Label>
+                <Label htmlFor="energy" className="text-foreground font-medium">Energy (1-10)</Label>
                 <Input
                   id="energy"
                   type="number"
                   min="1"
                   max="10"
                   placeholder="5"
+                  className="bg-background text-foreground"
                   {...register("energy")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="libido" className="text-foreground">Libido (1-10)</Label>
+                <Label htmlFor="libido" className="text-foreground font-medium">Libido (1-10)</Label>
                 <Input
                   id="libido"
                   type="number"
                   min="1"
                   max="10"
                   placeholder="5"
+                  className="bg-background text-foreground"
                   {...register("libido")}
                 />
               </div>
@@ -285,11 +290,12 @@ export function DoseForm({ open, onOpenChange, onSuccess }: DoseFormProps) {
 
             {/* Notes */}
             <div className="grid gap-2">
-              <Label htmlFor="notes" className="text-foreground">Notes</Label>
+              <Label htmlFor="notes" className="text-foreground font-medium">Notes</Label>
               <Textarea
                 id="notes"
                 placeholder="Any additional notes about this dose..."
                 rows={3}
+                className="bg-background text-foreground"
                 {...register("notes")}
               />
             </div>

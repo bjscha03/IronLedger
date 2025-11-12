@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { getCurrentUserId } from "@/lib/session"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
@@ -12,15 +11,15 @@ const createCompoundSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const includeArchived = searchParams.get("includeArchived") === "true"
 
-    const where: any = { userId: session.user.id }
+    const where: any = { userId }
     if (!includeArchived) {
       where.isArchived = false
     }
@@ -41,8 +40,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -52,7 +51,7 @@ export async function POST(request: NextRequest) {
     const compound = await prisma.compound.create({
       data: {
         ...validatedData,
-        userId: session.user.id,
+        userId,
       },
     })
 

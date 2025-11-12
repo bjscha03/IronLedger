@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { getCurrentUserId } from "@/lib/session"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
@@ -18,8 +17,8 @@ const createDoseSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -28,7 +27,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get("offset") || "0")
     const compoundId = searchParams.get("compoundId")
 
-    const where: any = { userId: session.user.id }
+    const where: any = { userId }
     if (compoundId) {
       where.compoundId = compoundId
     }
@@ -57,8 +56,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -69,7 +68,7 @@ export async function POST(request: NextRequest) {
       data: {
         ...validatedData,
         dateTime: new Date(validatedData.dateTime),
-        userId: session.user.id,
+        userId,
       },
       include: {
         compound: true,
